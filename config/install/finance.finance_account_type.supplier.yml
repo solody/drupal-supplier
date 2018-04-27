@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: supplier
+label: 商家结算账户
+withdraw_period: null
+minimum_withdraw: null
+maximum_withdraw: null

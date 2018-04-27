@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: platform
+label: 平台自营
+description: 平台自营的店铺，本质上和普通店铺没有区别，只是一个简单的类型名称上的区别，相比供应商店铺在资料中少了一些不必要的字段。
+traits: {  }
+locked: false

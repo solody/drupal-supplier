@@ -1,0 +1,15 @@
+entity.commerce_store.owner:
+  path: '/store/{commerce_store}/owner'
+  defaults:
+    _controller: '\Drupal\supplier\Controller\TaskRedirectController::owner'
+    _title: 'redirecting'
+  requirements:
+    _permission: 'access content'
+
+entity.commerce_store.finance_account:
+  path: '/store/{commerce_store}/finance_account'
+  defaults:
+    _controller: '\Drupal\supplier\Controller\TaskRedirectController::financeAccount'
+    _title: 'redirecting'
+  requirements:
+    _permission: 'access content'

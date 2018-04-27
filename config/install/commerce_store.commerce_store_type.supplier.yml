@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: supplier
+label: 供应商
+description: 外部合作供应商店的铺。
+traits: {  }
+locked: false

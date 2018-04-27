@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_store
+id: commerce_store.field_store_created
+field_name: field_store_created
+entity_type: commerce_store
+type: timestamp
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

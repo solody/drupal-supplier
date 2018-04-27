@@ -5,7 +5,12 @@
  * Contains supplier.module.
  */
 
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+
+const SUPPLIER_ROLE_ID = 'supplier';
+const SUPPLIER_FINANCE_ACCOUNT_TYPE = 'supplier';
 
 /**
  * Implements hook_help().
@@ -24,6 +29,20 @@ function supplier_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
+ * Implements hook_install().
+ */
+function supplier_install()
+{
+    // 创建供应商用户角色
+    $role = \Drupal\user\Entity\Role::create([
+        'langcode' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
+        'id' => SUPPLIER_ROLE_ID,
+        'label' => '供应商'
+    ]);
+    $role->save();
+}
+
+/**
  * Implements hook_theme().
  */
 function supplier_theme() {
@@ -32,4 +51,104 @@ function supplier_theme() {
       'render element' => 'children',
     ],
   ];
+}
+
+
+
+/**
+ * Implements hook_entity_base_field_info_alter()
+ *
+ * 修改 commerce_store实体的默认字段设置
+ */
+function supplier_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type) {
+
+    /* @var $fields \Drupal\Core\Field\BaseFieldDefinition[] */
+    if ($entity_type->id() == 'commerce_store') {
+
+        // 修改默认货币为 RMB
+        if (!empty($fields['default_currency'])) {
+            $fields['default_currency']
+                ->setDefaultValue('CNY');
+        }
+
+    }
+}
+
+
+/**
+ * Implements hook_form_FORM_ID_alter()
+ *
+ * FORM_ID: commerce_store_supplier_add_form
+ *
+ * 在添加供应商时，显示创建登录帐号表单
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ */
+function supplier_form_commerce_store_supplier_add_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+
+    $form['account'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('创建登录账号'),
+    );
+
+    // TODO: 检查用户名的可用性和唯一性
+    $form['account']['username'] = array(
+        '#type' => 'textfield',
+        '#title' => t('用户名'),
+        '#default_value' => '',
+        '#size' => 60,
+        '#maxlength' => \Drupal\user\UserInterface::USERNAME_MAX_LENGTH,
+        '#description' => t("Several special characters are allowed, including space, period (.), hyphen (-), apostrophe ('), underscore (_), and the @ sign."),
+        '#required' => TRUE,
+    );
+
+    $form['account']['password'] = array(
+        '#type' => 'textfield',
+        '#title' => t('密码'),
+        '#default_value' => '',
+        '#size' => 60,
+        '#maxlength' => 128,
+        '#required' => TRUE,
+    );
+
+    $form['actions']['submit']['#submit'][] = 'supplier_create_supplier_user';
+}
+
+
+/**
+ * 创建一个供应商用户
+ * @param $form
+ * @param FormStateInterface $form_state
+ */
+function supplier_create_supplier_user($form, FormStateInterface $form_state){
+
+    // 读取用户名密码
+    $form_values = $form_state->getValues();
+    $username = \Drupal\Component\Utility\NestedArray::getValue($form_values, $form['account']['username']['#parents']);
+    $password = \Drupal\Component\Utility\NestedArray::getValue($form_values, $form['account']['password']['#parents']);
+    $email = \Drupal\Component\Utility\NestedArray::getValue($form_values, $form['mail']['widget'][0]['#parents'])['value'];
+
+    // 创建用户
+    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $user = \Drupal\user\Entity\User::create();
+
+    $user->setPassword($password);
+    $user->enforceIsNew();
+    $user->setEmail($email);
+    $user->setUsername($username); //This username must be unique and accept only a-Z,0-9, - _ @ .
+    $user->addRole(SUPPLIER_ROLE_ID);
+    $user->activate();
+    $user->save();
+
+    // 把用户 id保存到 供应商的 uid字段
+    /** @var \Drupal\commerce_store\Entity\Store $entity */
+    $entity = $form_state->getFormObject()->getEntity();
+    $entity->setOwner($user);
+    $entity->save();
+
+    // 创建佣金管理账户（调用Finance模块）
+    $financeFinanceManager = \Drupal::getContainer()->get('finance.finance_manager');
+    $financeFinanceManager->createAccount($user, SUPPLIER_FINANCE_ACCOUNT_TYPE);
 }

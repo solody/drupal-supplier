@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_store.commerce_store_type.supplier
+    - field.storage.commerce_store.field_store_created
+id: commerce_store.supplier.field_store_created
+field_name: field_store_created
+entity_type: commerce_store
+bundle: supplier
+label: 创建时间
+description: 该供应商的创建时间。
+required: true
+translatable: false
+default_value:
+  -
+    value: 1520820497
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

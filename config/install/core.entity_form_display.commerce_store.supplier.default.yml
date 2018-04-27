@@ -1,0 +1,108 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_store.commerce_store_type.supplier
+    - field.field.commerce_store.supplier.field_store_agent
+    - field.field.commerce_store.supplier.field_store_bank_account_name
+    - field.field.commerce_store.supplier.field_store_bank_account_num
+    - field.field.commerce_store.supplier.field_store_bank_name
+    - field.field.commerce_store.supplier.field_store_created
+    - field.field.commerce_store.supplier.field_store_license
+    - field.field.commerce_store.supplier.field_store_tel
+    - image.style.thumbnail
+  module:
+    - address
+    - image
+id: commerce_store.supplier.default
+targetEntityType: commerce_store
+bundle: supplier
+mode: default
+content:
+  address:
+    type: address_default
+    settings:
+      default_country: CN
+    weight: 4
+    region: content
+    third_party_settings: {  }
+  default_currency:
+    type: options_select
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_store_agent:
+    weight: 1
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_store_bank_account_name:
+    weight: 6
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_store_bank_account_num:
+    weight: 7
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_store_bank_name:
+    weight: 5
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_store_created:
+    weight: 10
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_timestamp
+    region: content
+  field_store_license:
+    weight: 8
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+    region: content
+  field_store_tel:
+    weight: 2
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  mail:
+    type: email_default
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  billing_countries: true
+  prices_include_tax: true
+  tax_registrations: true

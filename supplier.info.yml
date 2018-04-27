@@ -1,8 +1,16 @@
 name: 'Supplier'
 type: module
-description: 'My Awesome Module'
+description: '提供商家结算功能。'
 core: 8.x
 package: 'Custom'
 dependencies:
+  - address
+  - commerce
   - commerce_store
+  - field
+  - file
+  - image
+  - system
+  - user
+  - views
   - finance
