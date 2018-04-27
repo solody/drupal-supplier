@@ -1,0 +1,6 @@
+services:
+  supplier.order_subscriber:
+    class: Drupal\supplier\EventSubscriber\OrderSubscriber
+    arguments: ['@finance.finance_manager']
+    tags:
+      - { name: event_subscriber }

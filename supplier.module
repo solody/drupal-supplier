@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 
@@ -151,4 +152,28 @@ function supplier_create_supplier_user($form, FormStateInterface $form_state){
     // 创建佣金管理账户（调用Finance模块）
     $financeFinanceManager = \Drupal::getContainer()->get('finance.finance_manager');
     $financeFinanceManager->createAccount($user, SUPPLIER_FINANCE_ACCOUNT_TYPE);
+}
+
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function supplier_entity_base_field_info(EntityTypeInterface $entity_type) {
+    $fields = [];
+    if ($entity_type->id() == 'commerce_product_variation') {
+
+        $fields['cost'] = BaseFieldDefinition::create('commerce_price')
+            ->setLabel(t('成本价'))
+            ->setDescription('用于与商家进行结算的价格，一般比平台实际销售价格要低。')
+            ->setDisplayOptions('view', [
+                'label' => 'inline',
+                'type' => 'commerce_price_default'
+            ])
+            ->setDisplayOptions('form', [
+                'type' => 'commerce_price_default'
+            ])
+            ->setDisplayConfigurable('view', true)
+            ->setDisplayConfigurable('form', true);
+    }
+    return $fields;
 }
