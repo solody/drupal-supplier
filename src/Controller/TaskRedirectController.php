@@ -32,6 +32,10 @@ class TaskRedirectController extends ControllerBase
         $query->condition('type', SUPPLIER_FINANCE_ACCOUNT_TYPE);
         $entity_ids = $query->execute();
 
+        if (empty($entity_ids)) return [
+            '#markup' => '<h4>找不到记账账户。</h4>'
+        ];
+
         return $this->redirect('entity.finance_account.canonical', ['finance_account' => array_pop($entity_ids)]);
     }
 }
