@@ -1,16 +1,17 @@
-name: 'Supplier'
+name: Supplier
 type: module
-description: '提供商家结算功能。'
+description: 提供商家结算功能。
 core: 8.x
-package: 'Custom'
+package: Custom
 dependencies:
   - address
   - commerce
+  - commerce_price
   - commerce_store
   - field
   - file
+  - finance
   - image
   - system
   - user
   - views
-  - finance

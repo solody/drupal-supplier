@@ -1,4 +1,4 @@
-langcode: en
+langcode: zh-hans
 status: true
 dependencies:
   config:
@@ -80,6 +80,7 @@ hidden:
   address: true
   billing_countries: true
   default_currency: true
+  langcode: true
   mail: true
   name: true
   prices_include_tax: true

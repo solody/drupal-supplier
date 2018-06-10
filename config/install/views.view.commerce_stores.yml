@@ -1,4 +1,4 @@
-langcode: en
+langcode: zh-hans
 status: true
 dependencies:
   config:
@@ -7,7 +7,6 @@ dependencies:
   module:
     - commerce
     - commerce_store
-    - system
     - user
 id: commerce_stores
 label: Stores
@@ -21,7 +20,7 @@ display:
   default:
     display_plugin: default
     id: default
-    display_title: Master
+    display_title: 主
     position: 0
     display_options:
       access:
@@ -42,13 +41,13 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Apply
+          submit_button: 应用
           reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          reset_button_label: 重置
+          exposed_sorts_label: 排序依据
           expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
+          sort_asc_label: 升序
+          sort_desc_label: 降序
       pager:
         type: full
         options:
@@ -58,17 +57,17 @@ display:
           total_pages: null
           expose:
             items_per_page: false
-            items_per_page_label: 'Items per page'
+            items_per_page_label: 每页条目数
             items_per_page_options: '5, 10, 25, 50'
             items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
+            items_per_page_options_all_label: '- 全部 -'
             offset: false
-            offset_label: Offset
+            offset_label: 偏移量
           tags:
-            previous: '‹ previous'
-            next: 'next ›'
-            first: '« first'
-            last: 'last »'
+            previous: '‹ 上一页'
+            next: '下一页 ›'
+            first: '« 第一页'
+            last: '末页 »'
           quantity: 9
       style:
         type: table
@@ -173,7 +172,7 @@ display:
           delta_reversed: false
           delta_first_last: false
           multi_type: separator
-          separator: ', '
+          separator: '， '
           field_api_classes: false
           entity_type: commerce_store
           entity_field: store_id
@@ -238,7 +237,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Name
+          label: 名称
           exclude: false
           alter:
             alter_text: false
@@ -291,7 +290,7 @@ display:
           delta_reversed: false
           delta_first_last: false
           multi_type: separator
-          separator: ', '
+          separator: '， '
           field_api_classes: false
           entity_type: null
           entity_field: name
@@ -356,7 +355,7 @@ display:
           delta_reversed: false
           delta_first_last: false
           multi_type: separator
-          separator: ', '
+          separator: '， '
           field_api_classes: false
           plugin_id: field
         field_store_created:
@@ -421,7 +420,7 @@ display:
           delta_reversed: false
           delta_first_last: false
           multi_type: separator
-          separator: ', '
+          separator: '， '
           field_api_classes: false
           plugin_id: field
         type:
@@ -431,7 +430,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Type
+          label: 类型
           exclude: false
           alter:
             alter_text: false
@@ -484,7 +483,7 @@ display:
           delta_reversed: false
           delta_first_last: false
           multi_type: separator
-          separator: ', '
+          separator: '， '
           field_api_classes: false
           hide_single_bundle: true
           entity_type: commerce_store
@@ -497,7 +496,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Operations
+          label: 操作
           exclude: false
           alter:
             alter_text: false
@@ -555,7 +554,7 @@ display:
           exposed: true
           expose:
             operator_id: type_op
-            label: Type
+            label: 类型
             description: ''
             use_operator: false
             operator: type_op
@@ -784,7 +783,7 @@ display:
   page_1:
     display_plugin: page
     id: page_1
-    display_title: Page
+    display_title: 页面
     position: 1
     display_options:
       display_extenders: {  }
