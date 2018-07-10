@@ -32,15 +32,14 @@ function supplier_help($route_name, RouteMatchInterface $route_match) {
 /**
  * Implements hook_install().
  */
-function supplier_install()
-{
-    // 创建供应商用户角色
-    $role = \Drupal\user\Entity\Role::create([
-        'langcode' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
-        'id' => SUPPLIER_ROLE_ID,
-        'label' => '供应商'
-    ]);
-    $role->save();
+function supplier_install() {
+  // 创建供应商用户角色
+  $role = \Drupal\user\Entity\Role::create([
+    'langcode' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
+    'id' => SUPPLIER_ROLE_ID,
+    'label' => '供应商'
+  ]);
+  $role->save();
 }
 
 /**
@@ -55,7 +54,6 @@ function supplier_theme() {
 }
 
 
-
 /**
  * Implements hook_entity_base_field_info_alter()
  *
@@ -63,16 +61,16 @@ function supplier_theme() {
  */
 function supplier_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type) {
 
-    /* @var $fields \Drupal\Core\Field\BaseFieldDefinition[] */
-    if ($entity_type->id() == 'commerce_store') {
+  /* @var $fields \Drupal\Core\Field\BaseFieldDefinition[] */
+  if ($entity_type->id() == 'commerce_store') {
 
-        // 修改默认货币为 RMB
-        if (!empty($fields['default_currency'])) {
-            $fields['default_currency']
-                ->setDefaultValue('CNY');
-        }
-
+    // 修改默认货币为 RMB
+    if (!empty($fields['default_currency'])) {
+      $fields['default_currency']
+        ->setDefaultValue('CNY');
     }
+
+  }
 }
 
 
@@ -89,32 +87,32 @@ function supplier_entity_base_field_info_alter(&$fields, EntityTypeInterface $en
  */
 function supplier_form_commerce_store_supplier_add_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
 
-    $form['account'] = array(
-        '#type' => 'fieldset',
-        '#title' => t('创建登录账号'),
-    );
+  $form['account'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('创建登录账号'),
+  );
 
-    // TODO: 检查用户名的可用性和唯一性
-    $form['account']['username'] = array(
-        '#type' => 'textfield',
-        '#title' => t('用户名'),
-        '#default_value' => '',
-        '#size' => 60,
-        '#maxlength' => \Drupal\user\UserInterface::USERNAME_MAX_LENGTH,
-        '#description' => t("Several special characters are allowed, including space, period (.), hyphen (-), apostrophe ('), underscore (_), and the @ sign."),
-        '#required' => TRUE,
-    );
+  // TODO: 检查用户名的可用性和唯一性
+  $form['account']['username'] = array(
+    '#type' => 'textfield',
+    '#title' => t('用户名'),
+    '#default_value' => '',
+    '#size' => 60,
+    '#maxlength' => \Drupal\user\UserInterface::USERNAME_MAX_LENGTH,
+    '#description' => t("Several special characters are allowed, including space, period (.), hyphen (-), apostrophe ('), underscore (_), and the @ sign."),
+    '#required' => TRUE,
+  );
 
-    $form['account']['password'] = array(
-        '#type' => 'textfield',
-        '#title' => t('密码'),
-        '#default_value' => '',
-        '#size' => 60,
-        '#maxlength' => 128,
-        '#required' => TRUE,
-    );
+  $form['account']['password'] = array(
+    '#type' => 'textfield',
+    '#title' => t('密码'),
+    '#default_value' => '',
+    '#size' => 60,
+    '#maxlength' => 128,
+    '#required' => TRUE,
+  );
 
-    $form['actions']['submit']['#submit'][] = 'supplier_create_supplier_user';
+  $form['actions']['submit']['#submit'][] = 'supplier_create_supplier_user';
 }
 
 
@@ -123,35 +121,49 @@ function supplier_form_commerce_store_supplier_add_form_alter(&$form, \Drupal\Co
  * @param $form
  * @param FormStateInterface $form_state
  */
-function supplier_create_supplier_user($form, FormStateInterface $form_state){
+function supplier_create_supplier_user($form, FormStateInterface $form_state) {
 
-    // 读取用户名密码
-    $form_values = $form_state->getValues();
-    $username = \Drupal\Component\Utility\NestedArray::getValue($form_values, $form['account']['username']['#parents']);
-    $password = \Drupal\Component\Utility\NestedArray::getValue($form_values, $form['account']['password']['#parents']);
-    $email = \Drupal\Component\Utility\NestedArray::getValue($form_values, $form['mail']['widget'][0]['#parents'])['value'];
+  // 读取用户名密码
+  $form_values = $form_state->getValues();
+  $username = \Drupal\Component\Utility\NestedArray::getValue($form_values, $form['account']['username']['#parents']);
+  $password = \Drupal\Component\Utility\NestedArray::getValue($form_values, $form['account']['password']['#parents']);
+  $email = \Drupal\Component\Utility\NestedArray::getValue($form_values, $form['mail']['widget'][0]['#parents'])['value'];
 
-    // 创建用户
-    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $user = \Drupal\user\Entity\User::create();
+  $store = $form_state->getFormObject()->getEntity();
 
-    $user->setPassword($password);
-    $user->enforceIsNew();
-    $user->setEmail($email);
-    $user->setUsername($username); //This username must be unique and accept only a-Z,0-9, - _ @ .
-    $user->addRole(SUPPLIER_ROLE_ID);
-    $user->activate();
-    $user->save();
+  _supplier_create_supplier_resource($store, $username, $password, $email);
+}
 
-    // 把用户 id保存到 供应商的 uid字段
-    /** @var \Drupal\commerce_store\Entity\Store $entity */
-    $entity = $form_state->getFormObject()->getEntity();
-    $entity->setOwner($user);
-    $entity->save();
 
-    // 创建佣金管理账户（调用Finance模块）
-    $financeFinanceManager = \Drupal::getContainer()->get('finance.finance_manager');
-    $financeFinanceManager->createAccount($user, SUPPLIER_FINANCE_ACCOUNT_TYPE);
+/**
+ * 为一个供应商创建相关资源：登录账号、记账账户
+ *
+ * @param $store
+ * @param $username
+ * @param $password
+ * @param $email
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function _supplier_create_supplier_resource($store, $username, $password, $email) {
+  // 创建用户
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $user = \Drupal\user\Entity\User::create();
+
+  $user->setPassword($password);
+  $user->enforceIsNew();
+  $user->setEmail($email);
+  $user->setUsername($username); //This username must be unique and accept only a-Z,0-9, - _ @ .
+  $user->addRole(SUPPLIER_ROLE_ID);
+  $user->activate();
+  $user->save();
+
+  // 把用户 id保存到 供应商的 uid字段
+  $store->setOwner($user);
+  $store->save();
+
+  // 创建佣金管理账户（调用Finance模块）
+  $financeFinanceManager = \Drupal::getContainer()->get('finance.finance_manager');
+  $financeFinanceManager->createAccount($user, SUPPLIER_FINANCE_ACCOUNT_TYPE);
 }
 
 
@@ -159,21 +171,22 @@ function supplier_create_supplier_user($form, FormStateInterface $form_state){
  * Implements hook_entity_base_field_info().
  */
 function supplier_entity_base_field_info(EntityTypeInterface $entity_type) {
-    $fields = [];
-    if ($entity_type->id() == 'commerce_product_variation') {
+  $fields = [];
+  if ($entity_type->id() == 'commerce_product_variation') {
 
-        $fields['cost'] = BaseFieldDefinition::create('commerce_price')
-            ->setLabel(t('成本价'))
-            ->setDescription('用于与商家进行结算的价格，一般比平台实际销售价格要低。')
-            ->setDisplayOptions('view', [
-                'label' => 'inline',
-                'type' => 'commerce_price_default'
-            ])
-            ->setDisplayOptions('form', [
-                'type' => 'commerce_price_default'
-            ])
-            ->setDisplayConfigurable('view', true)
-            ->setDisplayConfigurable('form', true);
-    }
-    return $fields;
+    $fields['cost'] = BaseFieldDefinition::create('commerce_price')
+      ->setLabel(t('成本价'))
+      ->setDescription('用于与商家进行结算的价格，一般比平台实际销售价格要低。')
+      ->setRequired(true)
+      ->setDisplayOptions('view', [
+        'label' => 'inline',
+        'type' => 'commerce_price_default'
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'commerce_price_default'
+      ])
+      ->setDisplayConfigurable('view', true)
+      ->setDisplayConfigurable('form', true);
+  }
+  return $fields;
 }
