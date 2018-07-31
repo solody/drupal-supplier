@@ -10,7 +10,7 @@ field_name: field_store_license
 entity_type: commerce_store
 type: image
 settings:
-  uri_scheme: public
+  uri_scheme: oss
   default_image:
     uuid: ''
     alt: ''
