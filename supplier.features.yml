@@ -1,1 +1,2 @@
-true
+excluded:
+  - user.role.supplier

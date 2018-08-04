@@ -7,11 +7,14 @@ dependencies:
   - address
   - commerce
   - commerce_price
+  - commerce_product
   - commerce_store
   - field
   - file
   - finance
   - image
+  - options
+  - state_machine
   - system
   - user
   - views

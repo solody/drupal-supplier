@@ -1,7 +1,39 @@
+supplier.admin:
+  path: '/admin/supplier'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: '商家'
+  requirements:
+    _role: supplier
+
+supplier.admin.finance:
+  path: '/admin/supplier/finance'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: '商家财务管理'
+  requirements:
+    _role: supplier
+
+supplier.admin_root.finance.account:
+  path: '/admin/supplier/finance/account'
+  defaults:
+    _controller: '\Drupal\supplier\Controller\RedirectController::supplierAccount'
+    _title: 'redirecting'
+  requirements:
+    _role: supplier
+
+supplier.admin.profile:
+  path: '/admin/supplier/profile'
+  defaults:
+    _controller: '\Drupal\supplier\Controller\RedirectController::supplierProfile'
+    _title: 'redirecting'
+  requirements:
+    _role: supplier
+
 entity.commerce_store.owner:
   path: '/store/{commerce_store}/owner'
   defaults:
-    _controller: '\Drupal\supplier\Controller\TaskRedirectController::owner'
+    _controller: '\Drupal\supplier\Controller\RedirectController::owner'
     _title: 'redirecting'
   requirements:
     _permission: 'access content'
@@ -9,7 +41,7 @@ entity.commerce_store.owner:
 entity.commerce_store.finance_account:
   path: '/store/{commerce_store}/finance_account'
   defaults:
-    _controller: '\Drupal\supplier\Controller\TaskRedirectController::financeAccount'
+    _controller: '\Drupal\supplier\Controller\RedirectController::financeAccount'
     _title: 'redirecting'
   requirements:
     _permission: 'access content'

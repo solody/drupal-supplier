@@ -40,6 +40,18 @@ function supplier_install() {
     'label' => '供应商'
   ]);
   $role->save();
+
+  // 添加权限
+  user_role_grant_permissions(SUPPLIER_ROLE_ID, [
+     'access toolbar',
+     'update own platform commerce_store',
+     'update own supplier commerce_store',
+     'view account entities',
+     'view ledger entities',
+     'view platform commerce_store',
+     'view supplier commerce_store',
+     'view withdraw entities'
+  ]);
 }
 
 /**
