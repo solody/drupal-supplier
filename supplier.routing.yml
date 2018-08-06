@@ -22,6 +22,14 @@ supplier.admin_root.finance.account:
   requirements:
     _role: supplier
 
+supplier.admin.finance.apply_withdraw:
+  path: '/admin/supplier/finance/apply_withdraw'
+  defaults:
+    _controller: '\Drupal\supplier\Controller\RedirectController::supplierWithdraw'
+    _title: 'redirecting'
+  requirements:
+    _role: supplier
+
 supplier.admin.profile:
   path: '/admin/supplier/profile'
   defaults:

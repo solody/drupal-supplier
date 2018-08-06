@@ -43,14 +43,15 @@ function supplier_install() {
 
   // 添加权限
   user_role_grant_permissions(SUPPLIER_ROLE_ID, [
-     'access toolbar',
-     'update own platform commerce_store',
-     'update own supplier commerce_store',
-     'view account entities',
-     'view ledger entities',
-     'view platform commerce_store',
-     'view supplier commerce_store',
-     'view withdraw entities'
+    'access toolbar',
+    'update own platform commerce_store',
+    'update own supplier commerce_store',
+    'view account entities',
+    'view ledger entities',
+    'view platform commerce_store',
+    'view supplier commerce_store',
+    'view withdraw entities',
+    'apply withdraw for own finance account'
   ]);
 }
 

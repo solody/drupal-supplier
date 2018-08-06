@@ -32,7 +32,11 @@ supplier.admin_root.finance.account:
   weight: 1
 supplier.admin_root.finance.withdraws:
   title: '我的提现'
-  description: '提现管理功能。'
   route_name: view.supplier_finance_withdraw_admin.page_1
   parent: supplier.admin_root.finance
   weight: 2
+supplier.admin_root.finance.apply_withdraw:
+  title: '申请提现'
+  route_name: supplier.admin.finance.apply_withdraw
+  parent: supplier.admin_root.finance
+  weight: 3
