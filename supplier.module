@@ -33,25 +33,18 @@ function supplier_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_install().
  */
 function supplier_install() {
-  // 创建供应商用户角色
-  $role = \Drupal\user\Entity\Role::create([
-    'langcode' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
-    'id' => SUPPLIER_ROLE_ID,
-    'label' => '供应商'
-  ]);
-  $role->save();
-
   // 添加权限
   user_role_grant_permissions(SUPPLIER_ROLE_ID, [
     'access toolbar',
+    'apply withdraw for own finance account',
     'update own platform commerce_store',
     'update own supplier commerce_store',
     'view account entities',
     'view ledger entities',
     'view platform commerce_store',
     'view supplier commerce_store',
-    'view withdraw entities',
-    'apply withdraw for own finance account'
+    'view the administration theme',
+    'view withdraw entities'
   ]);
 }
 

@@ -1,0 +1,8 @@
+langcode: zh-hans
+status: true
+dependencies: {  }
+id: supplier
+label: 供应商
+weight: 3
+is_admin: null
+permissions: {  }
