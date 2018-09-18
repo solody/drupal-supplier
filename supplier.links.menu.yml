@@ -1,26 +1,20 @@
-supplier.admin_root:
-  title: '商家'
-  route_name: 'supplier.admin'
-  parent: 'system.admin'
-  weight: -10
-
 supplier.admin_root.products:
   title: '产品管理'
   route_name: 'view.supplier_products.page_1'
-  parent: 'supplier.admin_root'
+  menu_name: supplier
   weight: 0
 
 supplier.admin_root.finance:
   title: '财务管理'
   route_name: supplier.admin.finance
   description: '供应商财务记账功能，提现管理功能。'
-  parent: supplier.admin_root
+  menu_name: supplier
   weight: 3
 
 supplier.admin_root.profile:
   title: '商家资料'
   route_name: 'supplier.admin.profile'
-  parent: 'supplier.admin_root'
+  menu_name: supplier
   weight: 999
 
 

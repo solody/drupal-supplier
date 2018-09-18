@@ -1,0 +1,8 @@
+langcode: zh-hans
+status: true
+dependencies: {  }
+id: supplier
+label: 商家中心
+weight: -11
+menu: supplier
+rewrite_label: true

@@ -1,0 +1,7 @@
+langcode: zh-hans
+status: true
+dependencies: {  }
+id: supplier
+label: 商家中心
+description: 驴眼旅行商家中心管理主菜单
+locked: true

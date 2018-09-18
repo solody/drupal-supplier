@@ -44,6 +44,7 @@ function supplier_install() {
     'view platform commerce_store',
     'view supplier commerce_store',
     'view the administration theme',
+    'view supplier in toolbar',
     'view withdraw entities'
   ]);
 }
