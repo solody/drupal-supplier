@@ -93,7 +93,25 @@ function supplier_entity_base_field_info_alter(&$fields, EntityTypeInterface $en
  * @param $form_id
  */
 function supplier_form_commerce_store_supplier_add_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  _supplier_add_account_form_elements($form);
+}
 
+/**
+ * Implements hook_form_FORM_ID_alter()
+ *
+ * FORM_ID: commerce_store_platform_add_form
+ *
+ * 在添加自营商家时，显示创建登录帐号表单
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ */
+function supplier_form_commerce_store_platform_add_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  _supplier_add_account_form_elements($form);
+}
+
+function _supplier_add_account_form_elements(&$form) {
   $form['account'] = array(
     '#type' => 'fieldset',
     '#title' => t('创建登录账号'),
@@ -121,7 +139,6 @@ function supplier_form_commerce_store_supplier_add_form_alter(&$form, \Drupal\Co
 
   $form['actions']['submit']['#submit'][] = 'supplier_create_supplier_user';
 }
-
 
 /**
  * 创建一个供应商用户
@@ -196,4 +213,22 @@ function supplier_entity_base_field_info(EntityTypeInterface $entity_type) {
       ->setDisplayConfigurable('form', true);
   }
   return $fields;
+}
+
+function supplier_entity_operation(Drupal\Core\Entity\EntityInterface $entity) {
+  $operations = [];
+  if ($entity->getEntityTypeId() === 'commerce_store') {
+    $operations['owner'] = [
+      'title' => t('用户帐号'),
+      'url' => \Drupal\Core\Url::fromRoute('entity.commerce_store.owner', ['commerce_store' => $entity->id()]),
+      'weight' => 20,
+    ];
+    $operations['finance_account'] = [
+      'title' => t('余额账户'),
+      'url' => \Drupal\Core\Url::fromRoute('entity.commerce_store.finance_account', ['commerce_store' => $entity->id()]),
+      'weight' => 20,
+    ];
+  }
+  return $operations;
+
 }
