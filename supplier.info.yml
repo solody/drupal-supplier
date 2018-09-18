@@ -18,3 +18,4 @@ dependencies:
   - system
   - user
   - views
+  - toolbar_menu
