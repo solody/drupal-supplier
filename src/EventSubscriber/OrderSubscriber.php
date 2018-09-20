@@ -41,6 +41,8 @@ class OrderSubscriber implements EventSubscriberInterface {
    */
   static function getSubscribedEvents() {
     $events['commerce_order.place.post_transition'] = ['commerce_order_place_post_transition'];
+    $events['commerce_order.fulfill.post_transition'] = ['commerce_order_complete_post_transition'];
+    $events['commerce_order.complete.post_transition'] = ['commerce_order_complete_post_transition'];
     $events['commerce_order.cancel.pre_transition'] = ['commerce_order_cancel_pre_transition'];
 
     return $events;
@@ -54,6 +56,19 @@ class OrderSubscriber implements EventSubscriberInterface {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   public function commerce_order_place_post_transition(WorkflowTransitionEvent $event) {
+    /** @var Order $commerce_order */
+    $commerce_order = $event->getEntity();
+  }
+
+
+  /**
+   * This method is called whenever the commerce_order.complete.post_transition event is
+   * dispatched.
+   *
+   * @param WorkflowTransitionEvent $event
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   */
+  public function commerce_order_complete_post_transition(WorkflowTransitionEvent $event) {
     /** @var Order $commerce_order */
     $commerce_order = $event->getEntity();
     // 为商家增加收入
@@ -77,15 +92,6 @@ class OrderSubscriber implements EventSubscriberInterface {
     /** @var Order $commerce_order */
     $commerce_order = $event->getEntity();
 
-    // 取消商家的收入
-    $account = $this->financeManager->getAccount($commerce_order->getStore()->getOwner(), SUPPLIER_FINANCE_ACCOUNT_TYPE);
-
-    if ($account) {
-      $amount = $this->costManager->computeOrderSupplierCost($commerce_order);
-      if (!$amount->isZero()) {
-        $this->financeManager->createLedger($account, Ledger::AMOUNT_TYPE_CREDIT, $amount, '订单[' . $commerce_order->id() . ']取消，扣除收入', $commerce_order);
-      }
-    }
   }
 
 }
