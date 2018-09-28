@@ -9,7 +9,7 @@ supplier.admin_root.finance:
   route_name: supplier.admin.finance
   description: '供应商财务记账功能，提现管理功能。'
   menu_name: supplier
-  weight: 3
+  weight: 10
 
 supplier.admin_root.profile:
   title: '商家资料'
